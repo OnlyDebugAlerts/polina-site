@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя ✨</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .main-title {
+            font-size: 3rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .photo-container {
+            position: relative;
+            margin: 30px 0;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .photo {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .photo:hover {
+            transform: scale(1.05);
+            border-color: #ffb6c1;
+            box-shadow: 0 25px 50px rgba(255, 182, 193, 0.4);
+        }
+        
+        .photo-glow {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #ff6b9d);
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .message {
+            max-width: 600px;
+            text-align: center;
+            color: white;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin: 30px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            animation: fadeIn 2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #ff6b9d;
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .interactive-btn {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3); }
+            50% { box-shadow: 0 5px 25px rgba(255, 107, 157, 0.6); }
+            100% { box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3); }
+        }
+        
+        .interactive-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.4);
+        }
+        
+        .surprise-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .surprise-message.show {
+            display: block;
+            animation: popIn 0.5s ease-out;
+        }
+        
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        .close-btn {
+            background: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .clickable-star {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .clickable-star:hover {
+            transform: scale(1.5);
+            background: #ffd700 !important;
+        }
+        
+        .floating-text {
+            position: absolute;
+            color: white;
+            font-size: 1.2rem;
+            pointer-events: none;
+            animation: floatUp 2s ease-out forwards;
+            z-index: 100;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title { font-size: 2rem; }
+            .photo { width: 280px; height: 280px; }
+            .message { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="hearts"></div>
+    
+    <div class="container">
+        <h1 class="main-title">Привет ✨</h1>
+        
+        <div class="photo-container">
+            <div class="photo-glow"></div>
+            <img src="2025-07-01 05.34.48.jpg" alt="Твоя красота" class="photo" onclick="showSurprise()">
+        </div>
+        
+        <div class="message">
+            Вчера было здорово познакомиться!<br>
+            Ты показалась мне очень интересной и обаятельной.<br>
+            Надеюсь, мы ещё увидимся 😊
+        </div>
+        
+        <button class="interactive-btn" onclick="createHearts()">Сердечки 💕</button>
+        <button class="interactive-btn" onclick="changeMessage()">Да я немного подхалим) ✨</button>
+        <button class="interactive-btn" onclick="changeBackground()">Сменить фон 🎨</button>
+        <button class="interactive-btn" onclick="createFireworks()">Салют (такой себе салют, надо было лучше матиматику в школе учить)! 🎆</button>
+    </div>
+    
+    <div class="surprise-message" id="surpriseMessage">
+        <h3>💝 Маленький сюрприз!</h3>
+        <p>Ты большая умница, желаю успехов в работе!</p>
+        <button class="close-btn" onclick="closeSurprise()">Закрыть 😊</button>
+    </div>
+
+    <script>
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star clickable-star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Добавляем клик по звезде
+                star.addEventListener('click', function(e) {
+                    createFloatingText(e.clientX, e.clientY, '✨');
+                    createMiniHearts(e.clientX, e.clientY);
+                });
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        function createHearts() {
+            const heartsContainer = document.querySelector('.hearts');
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '💕';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 1 + 's';
+                    heartsContainer.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 6000);
+                }, i * 200);
+            }
+        }
+        
+        function showSurprise() {
+            document.getElementById('surpriseMessage').classList.add('show');
+        }
+        
+        function closeSurprise() {
+            document.getElementById('surpriseMessage').classList.remove('show');
+        }
+        
+        const messages = [
+            'Мне понравилось наше вчерашнее общение. Ты классная! 😊',
+            'Вчера было весело с тобой болтать. Ты прикольная! 😄',
+            'Приятно было познакомиться вчера. Ты интересная! 🙂',
+            'Вчерашний день получился классным благодаря тебе! 👍',
+            'Было здорово пообщаться с тобой тебя вчера. Ты милая! 😊'
+        ];
+        
+        let currentMessageIndex = 0;
+        
+        function changeMessage() {
+            const messageElement = document.querySelector('.message');
+            currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+            
+            messageElement.style.opacity = '0';
+            setTimeout(() => {
+                messageElement.innerHTML = messages[currentMessageIndex];
+                messageElement.style.opacity = '1';
+            }, 300);
+        }
+        
+        createStars();
+        
+        // Смена фона
+        const backgrounds = [
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+            'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+            'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)'
+        ];
+        
+        let currentBgIndex = 0;
+        
+        function changeBackground() {
+            currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+            document.body.style.background = backgrounds[currentBgIndex];
+            createFloatingText(window.innerWidth / 2, window.innerHeight / 2, 'Красиво! 🎨');
+        }
+        
+        // Салют (фейерверк)
+        function createFireworks() {
+            const container = document.body;
+            const colors = ['#ff6b9d', '#c44569', '#f8b500', '#4facfe', '#00f2fe', '#ffd700'];
+            
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * window.innerWidth + 'px';
+                    firework.style.top = Math.random() * window.innerHeight + 'px';
+                    firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const size = Math.random() * 6 + 2;
+                    firework.style.width = size + 'px';
+                    firework.style.height = size + 'px';
+                    
+                    // Анимация взрыва
+                    firework.style.animation = `fireworkExplode ${Math.random() * 2 + 1}s ease-out forwards`;
+                    
+                    container.appendChild(firework);
+                    
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+            
+            createFloatingText(window.innerWidth / 2, 100, 'Ура! 🎆');
+        }
+        
+        // Создание плавающего текста
+        function createFloatingText(x, y, text) {
+            const floatingText = document.createElement('div');
+            floatingText.className = 'floating-text';
+            floatingText.innerText = text;
+            floatingText.style.left = x + 'px';
+            floatingText.style.top = y + 'px';
+            
+            document.body.appendChild(floatingText);
+            
+            setTimeout(() => {
+                floatingText.remove();
+            }, 2000);
+        }
+        
+        // Мини-сердечки при клике на звезду
+        function createMiniHearts(x, y) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '💕';
+                    heart.style.position = 'absolute';
+                    heart.style.left = x + Math.random() * 60 - 30 + 'px';
+                    heart.style.top = y + Math.random() * 60 - 30 + 'px';
+                    heart.style.fontSize = '12px';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.animation = 'float 2s ease-out forwards';
+                    heart.style.zIndex = '1000';
+                    
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 2000);
+                }, i * 100);
+            }
+        }
+        
+        // Добавляем стиль для анимации фейерверка
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fireworkExplode {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(3);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createHearts();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
